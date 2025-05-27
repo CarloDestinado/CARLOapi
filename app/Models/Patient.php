@@ -10,45 +10,31 @@ class Patient extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'patient_id',
+        'first_name',
+        'last_name',
         'date_of_birth',
         'gender',
         'address',
-        'phone_number',
+        'city',
+        'state',
+        'postal_code',
+        'phone',
+        'email',
+        'emergency_contact_name',
+        'emergency_contact_phone',
         'blood_type',
-        'height',
-        'weight',
-        'allergies',
-        'medical_history'
+        'allergies'
     ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
+    // Relationships
     public function diagnoses()
     {
-        return $this->hasMany(Diagnosis::class, 'patient_id', 'user_id');
+        return $this->hasMany(Diagnosis::class);
     }
 
     public function medicalRecords()
     {
-        return $this->hasMany(MedicalRecord::class, 'patient_id', 'user_id');
-    }
-
-    public function getAgeAttribute()
-    {
-        return now()->diffInYears($this->date_of_birth);
-    }
-
-    public function getBmiAttribute()
-    {
-        if (!$this->height || !$this->weight) {
-            return null;
-        }
-        
-        $heightInMeters = $this->height / 100;
-        return round($this->weight / ($heightInMeters * $heightInMeters), 2);
+        return $this->hasMany(MedicalRecord::class);
     }
 }

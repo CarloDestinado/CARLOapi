@@ -12,16 +12,19 @@ class Diagnosis extends Model
     protected $fillable = [
         'patient_id',
         'doctor_id',
+        'icd_code',
+        'diagnosis_name',
+        'description',
         'diagnosis_date',
-        'symptoms',
-        'diagnosis',
-        'treatment_plan',
-        'notes'
+        'status',
+        'severity',
+        'treatment_plan'
     ];
 
+    // Relationships
     public function patient()
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class);
     }
 
     public function doctor()
@@ -31,11 +34,6 @@ class Diagnosis extends Model
 
     public function medicalRecords()
     {
-        return $this->hasMany(MedicalRecord::class);
-    }
-
-    public function getFormattedDiagnosisDateAttribute()
-    {
-        return $this->diagnosis_date->format('F j, Y');
+        return $this->belongsToMany(MedicalRecord::class);
     }
 }

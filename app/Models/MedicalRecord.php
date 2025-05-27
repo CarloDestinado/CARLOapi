@@ -11,40 +11,28 @@ class MedicalRecord extends Model
 
     protected $fillable = [
         'patient_id',
-        'doctor_id',
         'record_date',
-        'diagnosis',
-        'treatment',
-        'notes',
-        'prescription'
+        'record_type',
+        'title',
+        'description',
+        'findings',
+        'is_confidential',
+        'created_by'
     ];
 
+    // Relationships
     public function patient()
     {
-        return $this->belongsTo(User::class, 'patient_id');
+        return $this->belongsTo(Patient::class);
     }
 
-    public function doctor()
+    public function creator()
     {
-        return $this->belongsTo(User::class, 'doctor_id');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function diagnosis()
+    public function diagnoses()
     {
-        return $this->belongsTo(Diagnosis::class);
-    }
-
-    public function getFormattedRecordDateAttribute()
-    {
-        return $this->record_date->format('F j, Y');
-    }
-
-    public function getPrescriptionArrayAttribute()
-    {
-        if (empty($this->prescription)) {
-            return [];
-        }
-        
-        return json_decode($this->prescription, true);
+        return $this->belongsToMany(Diagnosis::class);
     }
 }
